@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} Каталог {% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="container">
+            <h1 class="text-center mb-4">Каталог</h1>
+            <div class="d-flex justify-content-center">
+                <div class="w-75">
+                    {% for genre, books in books_by_genre.items() %}
+                        <div class="mb-4">
+                            <details class="w-100">
+                                <summary class="h5">{{ genre }}</summary>
+                                <ul class="list-unstyled mt-2">
+                                    {% for book in books %}
+                                        <li class="mb-2">
+                                            <a href="{{ url_for('books.book', book_id=book['id']) }}" class="text-decoration-none">
+                                                {{ book['author'] }}, "{{ book['title'] }}"
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </details>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

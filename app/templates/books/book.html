@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ book['author'] }}, "{{ book['title']}}" {% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 text-start">
+                    <h1 class="text-center mb-4">{{ book['title'] }}</h1>
+                    <h2 class="text-center mb-4">{{ book['author'] }}</h2>
+
+                    <div class="text-center mb-4">
+                        <img src="{{ url_for('static', filename=book['cover']) }}"
+                             class="img-fluid"
+                             alt="Обложка книги {{ book['title'] }}"
+                             style="height: 400px;">
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="mb-2">Рейтинг: {{ book['rating'] }}</div>
+                        <div class="mb-4">
+                            <h5>Описание</h5>
+                            <p>{{ book['description'] }}</p>
+                        </div>
+                        <div class="mb-2"><strong>Кол-во страниц:</strong> {{ book['pages'] }}</div>
+                        <div class="mb-2"><strong>Жанр:</strong> {{ book['genre'] }}</div>
+                        <div class="mb-2"><strong>ID книги:</strong> {{ book['id'] }}</div>
+                        <div class="mb-2"><strong>Год издания:</strong> {{ book['year'] }}</div>
+                        <div class="mb-4"><strong>В наличии:</strong> {{ book['quantity'] }} экз.</div>
+                    </div>
+
+                    <div class="text-center mb-5">
+                        <form action="{{ url_for('books.book', book_id=book.id) }}" method="POST">
+                            <input type="hidden" name="form_type" value="add_book">
+                            <button type="submit" class="btn btn-primary" {% if book_quantity <= 0 %}disabled{% endif %}>
+                                Добавить в корзину
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <h3 class="text-center mb-4">Отзывы</h3>
+
+                    {% if reviews %}
+                        {% for review in reviews %}
+                            {% if review.book_id == book['id'] %}
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ review.user }}</h5>
+                                        <div class="card-text mb-2">{{ review.review }}</div>
+                                        <div class="text-muted">Оценка: {{ review.rating }}/5</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-muted mb-4">Пока нет отзывов об этой книге</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if current_user.is_authenticated %}
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-center mb-4">Поделитесь своим мнением</h5>
+                            <form action="{{ url_for('books.book', book_id=book.id) }}" method="POST">
+                                <input type="hidden" name="form_type" value="review">
+
+                                <div class="mb-3">
+                                    <label for="review-text" class="form-label">Ваш отзыв:</label>
+                                    <textarea id="review-text"
+                                              name="review_text"
+                                              class="form-control"
+                                              rows="4"
+                                              maxlength="1000"
+                                              placeholder="Ваш отзыв"
+                                              required>{{ review_text }}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Оцените книгу:</label>
+                                    <div class="star-rating">
+                                        {% for i in range(5, 0, -1) %}
+                                            <input type="radio" id="star-{{ i }}" name="rating" value="{{ i }}" required>
+                                            <label for="star-{{ i }}">{{ i }}</label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Отправить</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-8 col-lg-6 text-center">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-link">Авторизуйтесь, чтобы отправить отзыв и оценку</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+
+

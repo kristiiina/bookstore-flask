@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} История заказов {% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="container text-center">
+            <h1 class="mb-4">История заказов</h1>
+            {% if users_orders %}
+                <div class="list-group mb-4">
+                    {% for order in users_orders %}
+                        <a href="{{ url_for('orders.order_info', user_id=user_id, order_id=order['id']) }}" class="list-group-item list-group-item-action">
+                            Заказ № {{ order['id'] }} от {{ order['created_at'] }} ({{ order['status'] }})
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">Вы пока не сделали ни одного заказа</div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

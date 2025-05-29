@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block title %} Оформление заказа {% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="container">
+
+            <h1 class="mb-4">Ваш заказ:</h1>
+            <div class="table-responsive mb-5">
+                <table class="table">
+                    <tbody>
+                        {% for cart_item in available_items %}
+                            <tr>
+                                <td style="width: 100px;">
+                                    <img src="{{ url_for('static', filename=cart_item['cover']) }}"
+                                         class="img-thumbnail"
+                                         alt="Обложка книги {{ cart_item['title'] }}"
+                                         style="max-height: 100px;">
+                                </td>
+
+                                <td class="align-middle">
+                                    <div class="fw-bold">{{ cart_item['title'] }}</div>
+                                    <div class="text-muted">{{ cart_item['author'] }}</div>
+                                </td>
+
+                                <td class="align-middle">
+                                    <div class="quantity">{{ cart_item['quantity'] }} шт.</div>
+                                </td>
+
+                                <td class="align-middle text-end">
+                                    <div class="fw-bold">{{ "%.2f"|format(cart_item['price'] * cart_item['quantity']) }} руб.</div>
+                                    <div class="text-muted small">{{ "%.2f"|format(cart_item['price']) }} руб./шт.</div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Выберите способ доставки (только по Москве):</h5>
+
+                            <form action="{{ url_for('orders.new_order', user_id=user_id) }}" method="POST">
+                                <input type="hidden" name="form_type" value="delivery_method">
+
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               id="door-delivery"
+                                               name="delivery_method"
+                                               value="door"
+                                               {% if delivery_method == 'door' %}checked{% endif %}
+                                               required>
+                                        <label class="form-check-label" for="door-delivery">Курьером до двери</label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               id="pickup"
+                                               name="delivery_method"
+                                               value="pickup"
+                                               {% if delivery_method == 'pickup' %}checked{% endif %}
+                                               required>
+                                        <label class="form-check-label" for="pickup">Самовывоз из магазина</label>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Продолжить оформление</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    {% if delivery_method and delivery_method == 'door' %}
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">Адрес доставки</h5>
+
+                                <form action="{{ url_for('orders.new_order', user_id=user_id) }}" method="POST">
+                                    <input type="hidden" name="form_type" value="address_details">
+
+                                    <div class="mb-3">
+                                        <label for="city" class="form-label">Город:</label>
+                                        <input id="city" type="text" class="form-control" name="city" value="Москва" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="street" class="form-label">Улица:</label>
+                                        <input id="street" type="text" class="form-control" name="street" placeholder="Введите улицу" required>
+                                    </div>
+
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-md-6">
+                                            <label for="house-number" class="form-label">Дом:</label>
+                                            <input id="house-number" type="text" class="form-control" name="house_number" placeholder="Введите номер дома" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="building-number" class="form-label">Корпус/строение:</label>
+                                            <input id="building-number" type="text" class="form-control" name="building_number" placeholder="Введите номер корпуса/строения">
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-md-6">
+                                            <label for="entrance" class="form-label">Подъезд:</label>
+                                            <input id="entrance" type="text" class="form-control" name="entrance" placeholder="Введите номер подъезда">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="intercom" class="form-label">Домофон:</label>
+                                            <input id="intercom" type="text" class="form-control" name="intercom" placeholder="Введите номер домофона">
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-2 mb-4">
+                                        <div class="col-md-6">
+                                            <label for="floor" class="form-label">Этаж:</label>
+                                            <input id="floor" type="text" class="form-control" name="floor" placeholder="Введите номер этажа">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="apartment" class="form-label">Квартира:</label>
+                                            <input id="apartment" type="text" class="form-control" name="apartment" placeholder="Введите номер квартиры">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="comment" class="form-label">Комментарий:</label>
+                                        <textarea id="comment" class="form-control" name="comment" rows="3" maxlength="500" placeholder="Сообщите дополнительные детали для доставки"></textarea>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-lg">Оплатить заказ</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if delivery_method and delivery_method == 'pickup' %}
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">Выберите пункт самовывоза</h5>
+
+                                <form action="{{ url_for('orders.new_order', user_id=user_id) }}" method="POST">
+                                    <input type="hidden" name="form_type" value="store_address">
+
+                                    {% for store_address in store_addresses %}
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input"
+                                                       type="radio"
+                                                       id="{{ store_address['id'] }}"
+                                                       name="store_address"
+                                                       value="{{ store_address['store_address'] }}"
+                                                       {% if pickup_address_id == store_address['id'] %}checked{% endif %}
+                                                       required>
+                                                <label class="form-check-label" for="{{ store_address['id'] }}">
+                                                    {{ store_address['store_address'] }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
+                                    <div class="d-grid mt-4">
+                                        <button type="submit" class="btn btn-primary btn-lg">Оплатить заказ</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

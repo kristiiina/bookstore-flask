@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %} iLoveBooks - интернет-магазин книг {% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="container">
+            <h1 class="text-center mb-4">ТОП-3 книги недели:</h1>
+            <div class="row row-cols-md-3 g-4">
+                {% for book in top_books %}
+                    <div class="col">
+                        <a href="{{ url_for('books.book', book_id=book[1]['id']) }}" class="text-decoration-none">
+                            <div class="card h-100">
+                                <img src="{{ url_for('static', filename=book[1]['cover']) }}"
+                                     class="card-img-top"
+                                     alt="Обложка книги {{ book[1]['title'] }}"
+                                     style="height: 300px; object-fit: contain;">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">{{ book[1]['title'] }}</h5>
+                                    <p class="card-text">{{ book[1]['author'] }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="container mt-5">
+            <h1 class="text-center mb-4">ТОП книг по жанрам:</h1>
+            <div class="mb-5">
+                {% for genre, books in top_books_by_genre.items() %}
+                    <h2 class="text-center mb-3">{{ genre }}</h2>
+                    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 justify-content-center">
+                        {% for book in books %}
+                            <div class="col">
+                                <a href="{{ url_for('books.book', book_id=book['id']) }}" class="text-decoration-none">
+                                    <div class="card h-100">
+                                        <div>
+                                            <img src="{{ url_for('static', filename=book['cover']) }}"
+                                                 alt="Обложка книги {{ book['title'] }}"
+                                                 class="card-img-top"
+                                                 style="height: 200px; object-fit: contain;">
+                                        </div>
+                                        <div class="card-body p-2 text-center">
+                                            <div class="card-title">{{ book['title'] }}</div>
+                                            <div class="card-text small text-muted">{{ book['author'] }}</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

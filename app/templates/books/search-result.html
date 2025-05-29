@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %} Результаты поиска {% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="container">
+            {% if not result %}
+                <div class="alert alert-info text-center mt-4 py-2" style="font-size: 0.9rem">
+                    По запросу "{{ search_query }}" ничего не найдено
+                </div>
+            {% else %}
+                <h2 class="mb-3" style="font-size: 1.25rem">Результаты поиска по запросу "{{ search_query }}"</h2>
+
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 mb-4">
+                    {% for book in result %}
+                        <div class="col">
+                            <a href="{{ url_for('books.book', book_id=book.id) }}" class="text-decoration-none">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <img src="{{ url_for('static', filename=book['cover']) }}"
+                                         class="card-img-top p-2"
+                                         alt="Обложка книги {{ book['title'] }}"
+                                         style="height: 180px; object-fit: contain;">
+
+                                    <div class="card-body p-2 text-center">
+                                        <h6 class="card-title mb-1" style="font-size: 0.85rem">
+                                            {{ book['title'] }}
+                                        </h6>
+                                        <p class="card-text text-muted mb-0" style="font-size: 0.75rem">
+                                            {{ book['author'] }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
