@@ -280,10 +280,12 @@ def init_store_address():
                 return
             for store_address in store_addresses:
                 try:
-                    full_address = (f'г. {store_address['city']}, '
-                               f'ул. {store_address['street']}, '
-                               f'д. {store_address['house']}, '
-                               f'к. {store_address['building']}')
+                    full_address = (
+                        f'г. {store_address["city"]}, '
+                        f'ул. {store_address["street"]}, '
+                        f'д. {store_address["house"]}, '
+                        f'к. {store_address["building"]}'
+                    )
                     if not db_session.query(StoreAddress).filter_by(store_address=full_address).first():
                         db_session.add(StoreAddress(store_address=full_address))
                 except (KeyError, ValueError) as e:
@@ -315,15 +317,15 @@ def create_orders():
                     address = ''
                     if delivery_method == 'pickup':
                         index = random.randrange(len(store_addresses))
-                        address = (f'г. {store_addresses[index]['city']}, '
-                                   f'ул. {store_addresses[index]['street']}, '
-                                   f'д. {store_addresses[index]['house']}, '
-                                   f'к. {store_addresses[index]['building']}')
+                        address = (f'г. {store_addresses[index]["city"]}, '
+                                   f'ул. {store_addresses[index]["street"]}, '
+                                   f'д. {store_addresses[index]["house"]}, '
+                                   f'к. {store_addresses[index]["building"]}')
                     elif delivery_method == 'door':
-                        address = (f'г. {store_addresses[random.randrange(len(store_addresses))]['city']}, '
-                                   f'ул. {store_addresses[random.randrange(len(store_addresses))]['street']}, '
-                                   f'д. {store_addresses[random.randrange(len(store_addresses))]['house']}, '
-                                   f'к. {store_addresses[random.randrange(len(store_addresses))]['building']}')
+                        address = (f'г. {store_addresses[random.randrange(len(store_addresses))]["city"]}, '
+                                   f'ул. {store_addresses[random.randrange(len(store_addresses))]["street"]}, '
+                                   f'д. {store_addresses[random.randrange(len(store_addresses))]["house"]}, '
+                                   f'к. {store_addresses[random.randrange(len(store_addresses))]["building"]}')
                     full_address = ' '.join(address)
 
                     order = Order(

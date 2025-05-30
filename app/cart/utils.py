@@ -23,7 +23,7 @@ class CartService:
     def cart_item_to_dict(cart_item):
         """Возвращает объект из cart_item в виде словаря"""
         if not cart_item:
-            raise ValueError("Товар не найден в корзине")
+            raise ValueError('Товар не найден в корзине')
         try:
             return {
                 'id': cart_item.id,

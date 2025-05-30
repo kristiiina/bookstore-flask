@@ -13,5 +13,5 @@ class Settings(BaseSettings):
 try:
     settings = Settings()
 except Exception as e:
-    raise RuntimeError(f"Ошибка загрузки настроек: {e}")
+    raise RuntimeError(f'Ошибка загрузки настроек: {e}')
 

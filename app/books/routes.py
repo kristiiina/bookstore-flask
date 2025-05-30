@@ -50,7 +50,7 @@ def catalog():
         flash('Проблемы с базой данных', 'error')
         return render_template('books/home.html', top_books=[], top_books_by_genre={})
     except Exception as e:
-        print(f"Произошла ошибка: {e}")
+        print(f'Произошла ошибка: {e}')
         return render_template('books/home.html', top_books=[], top_books_by_genre={})
 
 
@@ -67,7 +67,7 @@ def search():
         flash('Книги не найдены', 'error')
         return render_template('books/home.html', top_books=[], top_books_by_genre={})
     except Exception as e:
-        print(f"Произошла ошибка: {e}")
+        print(f'Произошла ошибка: {e}')
         return render_template('books/home.html', top_books=[], top_books_by_genre={})
 
 
@@ -93,7 +93,7 @@ def book(book_id):
                     flash('Отзыв успешно добавлен', 'success')
                 except Exception as e:
                     print(f'Произошла ошибка: {e}')
-                    flash(f'Ошибка добавления отзыва', 'error')
+                    flash('Ошибка добавления отзыва', 'error')
 
                 return redirect(url_for('books.book', book_id=book_id))
 
@@ -124,7 +124,7 @@ def book(book_id):
         return redirect(url_for('books.home'))
 
     except Exception as e:
-        print(f"Ошибка: {e}")
+        print(f'Ошибка: {e}')
         flash('Внутренняя ошибка сервера', 'error')
         return redirect(url_for('books.home'))
 

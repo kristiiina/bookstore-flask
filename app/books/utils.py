@@ -41,7 +41,7 @@ class BookService:
     def book_to_dict(book):
         """Получает книгу по объекту из БД"""
         if not book:
-            raise ValueError("Книга не найдена")
+            raise ValueError('Книга не найдена')
         try:
             quantity_in_orders = sum(item.quantity for item in book.in_orders) if hasattr(book, 'in_orders') else 0
             return {
@@ -59,15 +59,15 @@ class BookService:
                 'quantity_in_orders': quantity_in_orders
             }
         except AttributeError as e:
-            raise ValueError(f"Некорректный объект книги: {e}") from e
+            raise ValueError(f'Некорректный объект книги: {e}') from e
         except TypeError as e:
-            raise ValueError(f"Ошибка в данных книги: {e}") from e
+            raise ValueError(f'Ошибка в данных книги: {e}') from e
 
     @staticmethod
     def review_to_dict(review):
         """Преобразование отзыва в словарь"""
         if not review:
-            raise ValueError("Отзыв не найден")
+            raise ValueError('Отзыв не найден')
         try:
             return {
                 'id': review.id,
@@ -79,7 +79,7 @@ class BookService:
                 'books': review.book.title
             }
         except AttributeError as e:
-            raise ValueError(f"Некорректный объект отзыва: {str(e)}")
+            raise ValueError(f'Некорректный объект отзыва: {str(e)}')
 
     @staticmethod
     def get_all_books():
@@ -88,15 +88,15 @@ class BookService:
             with session_scope() as db_session:
                 all_books = db_session.query(Book).all()
                 if not all_books:
-                    raise BooksNotFoundError("Книги не найдены")
+                    raise BooksNotFoundError('Книги не найдены')
                 return [BookService.book_to_dict(book) for book in all_books]
 
         except DatabaseError as db_error:
-                raise DatabaseOperationError("Ошибка при работе с базой данных") from db_error
+                raise DatabaseOperationError('Ошибка при работе с базой данных') from db_error
         except SQLAlchemyError as sql_error:
-            raise DataAccessError("Ошибка доступа к данным") from sql_error
+            raise DataAccessError('Ошибка доступа к данным') from sql_error
         except Exception as error:
-            raise ServiceError("Внутренняя ошибка сервиса книг") from error
+            raise ServiceError('Внутренняя ошибка сервиса книг') from error
 
     @staticmethod
     def get_book_by_id(book_id):
@@ -108,11 +108,11 @@ class BookService:
                     raise BookNotFoundError(f'Книга с id {book_id} не найдена')
                 return BookService.book_to_dict(book)
         except DatabaseError as db_error:
-                raise DatabaseOperationError("Ошибка при работе с базой данных") from db_error
+                raise DatabaseOperationError('Ошибка при работе с базой данных') from db_error
         except SQLAlchemyError as sql_error:
-            raise DataAccessError("Ошибка доступа к данным") from sql_error
+            raise DataAccessError('Ошибка доступа к данным') from sql_error
         except Exception as error:
-            raise ServiceError("Внутренняя ошибка сервиса книг") from error
+            raise ServiceError('Внутренняя ошибка сервиса книг') from error
 
     @staticmethod
     def get_books_by_genre():
@@ -142,11 +142,11 @@ class BookService:
                     return None
                 return book.quantity
         except DatabaseError as db_error:
-                raise DatabaseOperationError("Ошибка при работе с базой данных") from db_error
+                raise DatabaseOperationError('Ошибка при работе с базой данных') from db_error
         except SQLAlchemyError as sql_error:
-            raise DataAccessError("Ошибка доступа к данным") from sql_error
+            raise DataAccessError('Ошибка доступа к данным') from sql_error
         except Exception as error:
-            raise ServiceError("Внутренняя ошибка сервиса книг") from error
+            raise ServiceError('Внутренняя ошибка сервиса книг') from error
 
     @staticmethod
     def get_reviews_by_book_id(book_id):
@@ -158,11 +158,11 @@ class BookService:
                     return []
                 return [BookService.review_to_dict(review) for review in reviews]
         except DatabaseError as db_error:
-            raise DatabaseOperationError("Ошибка при работе с базой данных") from db_error
+            raise DatabaseOperationError('Ошибка при работе с базой данных') from db_error
         except SQLAlchemyError as sql_error:
-            raise DataAccessError("Ошибка доступа к данным") from sql_error
+            raise DataAccessError('Ошибка доступа к данным') from sql_error
         except Exception as error:
-            raise ServiceError("Внутренняя ошибка сервиса книг") from error
+            raise ServiceError('Внутренняя ошибка сервиса книг') from error
 
     @staticmethod
     def add_review(review_text, user_id, book_id, rating):
@@ -183,11 +183,11 @@ class BookService:
                 book.update_rating()
                 return new_review
         except DatabaseError as db_error:
-                raise DatabaseOperationError("Ошибка при работе с базой данных") from db_error
+                raise DatabaseOperationError('Ошибка при работе с базой данных') from db_error
         except SQLAlchemyError as sql_error:
-            raise DataAccessError("Ошибка доступа к данным") from sql_error
+            raise DataAccessError('Ошибка доступа к данным') from sql_error
         except Exception as error:
-            raise ServiceError("Внутренняя ошибка сервиса книг") from error
+            raise ServiceError('Внутренняя ошибка сервиса книг') from error
 
     @staticmethod
     def update_cart(user_id, book_id):
@@ -212,17 +212,17 @@ class BookService:
                 db_session.add(new_cart_item)
             return new_cart_item
         except DatabaseError as db_error:
-                raise DatabaseOperationError("Ошибка при работе с базой данных") from db_error
+                raise DatabaseOperationError('Ошибка при работе с базой данных') from db_error
         except SQLAlchemyError as sql_error:
-            raise DataAccessError("Ошибка доступа к данным") from sql_error
+            raise DataAccessError('Ошибка доступа к данным') from sql_error
         except Exception as error:
-            raise ServiceError("Внутренняя ошибка сервиса книг") from error
+            raise ServiceError('Внутренняя ошибка сервиса книг') from error
 
     @staticmethod
     def search_book(user_query):
         """Поиск книги"""
         if not user_query or len(user_query.strip()) < 2:
-            raise ValueError("Слишком короткий поисковый запрос")
+            raise ValueError('Слишком короткий поисковый запрос')
         user_query = user_query.lower().strip()
         try:
             all_books = BookService.get_all_books()
@@ -236,8 +236,8 @@ class BookService:
                     result.append(book)
             return result
         except Exception as e:
-            print(f"Произошла ошибка: {e}")
-            raise ServiceError(f"Ошибка поиска: {str(e)}") from e
+            print(f'Произошла ошибка: {e}')
+            raise ServiceError(f'Ошибка поиска: {str(e)}') from e
 
     @staticmethod
     def get_top_books():
@@ -287,11 +287,11 @@ class BookService:
                 return top_books
 
         except DatabaseError as db_error:
-                raise DatabaseOperationError("Ошибка при работе с базой данных") from db_error
+                raise DatabaseOperationError('Ошибка при работе с базой данных') from db_error
         except SQLAlchemyError as sql_error:
-            raise DataAccessError("Ошибка доступа к данным") from sql_error
+            raise DataAccessError('Ошибка доступа к данным') from sql_error
         except Exception as error:
-            raise ServiceError("Внутренняя ошибка сервиса книг") from error
+            raise ServiceError('Внутренняя ошибка сервиса книг') from error
 
     @staticmethod
     def get_top_books_by_genre():
@@ -331,10 +331,10 @@ class BookService:
                 return top_books_by_genre
 
         except DatabaseError as db_error:
-            raise DatabaseOperationError("Ошибка при работе с базой данных") from db_error
+            raise DatabaseOperationError('Ошибка при работе с базой данных') from db_error
         except SQLAlchemyError as sql_error:
-            raise DataAccessError("Ошибка доступа к данным") from sql_error
+            raise DataAccessError('Ошибка доступа к данным') from sql_error
         except Exception as error:
-            raise ServiceError("Внутренняя ошибка сервиса книг") from error
+            raise ServiceError('Внутренняя ошибка сервиса книг') from error
 
 

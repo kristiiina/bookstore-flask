@@ -125,7 +125,7 @@ def new_order(user_id):
                                store_addresses=store_addresses)
 
     except Exception as e:
-        print(f"Неожиданная ошибка: {e}")
+        print(f'Неожиданная ошибка: {e}')
         flash('Внутренняя ошибка сервера', 'error')
         return redirect(url_for('books.home'))
 
@@ -148,12 +148,12 @@ def order_payment(user_id, order_id, step):
         if form.validate_on_submit():
             if step == 'card_details':
                 session['code'] = str(randint(1111, 9999))
-                flash(f'Ваш код подтверждения оплаты: {session['code']}', 'success')
+                flash(f'Ваш код подтверждения оплаты: {session["code"]}', 'success')
                 return redirect(url_for('orders.order_payment', user_id=user_id, order_id=order_id, step='code'))
 
             elif step == 'code' and session.get('code'):
                 if form.code.data != session['code']:
-                    flash(f'Неверный код, верный код: {session['code']}', 'error')
+                    flash(f'Неверный код, верный код: {session["code"]}', 'error')
                     return redirect(url_for('orders.order_payment', user_id=user_id, order_id=order_id, step='code'))
                 session.pop('code', None)
                 try:
@@ -187,12 +187,12 @@ def order_payment(user_id, order_id, step):
             flash('Ошибка при получении информации о заказе', 'error')
             return redirect(url_for('books.home'))
         except Exception as e:
-            print(f"Произошла ошибка: {e}")
+            print(f'Произошла ошибка: {e}')
             flash('Внутренняя ошибка сервера', 'error')
             return redirect(url_for('books.home'))
 
     except Exception as e:
-        print(f"Произошла ошибка: {e}")
+        print(f'Произошла ошибка: {e}')
         flash('Внутренняя ошибка сервера', 'error')
         return redirect(url_for('books.home'))
 
@@ -228,7 +228,7 @@ def order_info(user_id, order_id):
             flash(str(e), 'error')
             return redirect(url_for('books.home'))
         except Exception as e:
-            print(f"Неожиданная ошибка: {e}")
+            print(f'Неожиданная ошибка: {e}')
             flash('Внутренняя ошибка сервера', 'error')
             return redirect(url_for('books.home'))
 

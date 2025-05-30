@@ -96,12 +96,12 @@ def reset_password(step):
                         return redirect(url_for('auth.reset_password', step='phone'))
                     session['user_id'] = user.id
                     session['code'] = str(randint(1111, 9999))
-                    flash(f'Ваш код верификации: {session['code']}', 'success')
+                    flash(f'Ваш код верификации: {session["code"]}', 'success')
                     return redirect(url_for('auth.reset_password', step='code'))
 
             elif step == 'code' and session.get('code'):
                 if form.code.data != session['code']:
-                    flash(f'Неверный код, ваш код: {session['code']}', 'error')
+                    flash(f'Неверный код, ваш код: {session["code"]}', 'error')
                     return redirect(url_for('auth.reset_password', step='code'))
                 session['new_password'] = True
                 return redirect(url_for('auth.reset_password', step='new_password'))

@@ -11,7 +11,7 @@ class OrderService:
         try:
             return store_address['store_address']
         except (KeyError, TypeError) as e:
-            raise ValueError("Некорректный формат адреса магазина") from e
+            raise ValueError('Некорректный формат адреса магазина') from e
 
     @staticmethod
     def order_to_dict(order):
@@ -27,7 +27,7 @@ class OrderService:
                 'address': order.address
             }
         except AttributeError as e:
-            raise ValueError("Некорректный объект заказа") from e
+            raise ValueError('Некорректный объект заказа') from e
 
     @staticmethod
     def get_order_by_id(order_id):
