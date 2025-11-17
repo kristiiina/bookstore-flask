@@ -1,11 +1,14 @@
 from flask import Blueprint, flash, redirect, render_template, url_for, request
 from flask_login import current_user
-from app.books.utils import (BookService,
-                             BookNotFoundError,
-                             BooksNotFoundError,
-                             DatabaseOperationError,
-                             DataAccessError)
-
+# from app.books.utils import (BookService,
+#                              BookNotFoundError,
+#                              BooksNotFoundError,
+#                              DatabaseOperationError,
+#                              DataAccessError)
+# from app.books.utils import (BookNotFoundError,
+#                              BooksNotFoundError)
+from app.services import BookService
+from app.exceptions import DatabaseOperationError, DataAccessError, BookNotFoundError, BooksNotFoundError
 
 books_bp = Blueprint('books', __name__)
 
@@ -74,19 +77,19 @@ def search():
 @books_bp.route('/books/<book_id>', methods=['GET', 'POST'])
 def book(book_id):
     try:
-        book = BookService.get_book_by_id(book_id)
+        book_by_id = BookService.get_book_by_id(book_id)
         reviews = BookService.get_reviews_by_book_id(book_id)
         book_quantity = BookService.check_book_quantity(book_id)
 
-        if not book:
+        if not book_by_id:
             flash('Книга не найдена', 'error')
             return render_template('books/home.html')
 
         form_type = request.form.get('form_type')
 
         if form_type == 'review' and current_user.is_authenticated:
-            review_text = request.form.get('review_text').strip()
-            rating = int(request.form.get('rating').strip())
+            review_text = request.form['review_text'].strip()
+            rating = int(request.form['rating'].strip())
             if review_text and rating:
                 try:
                     BookService.add_review(review_text, current_user.id, book_id, rating)
@@ -111,7 +114,7 @@ def book(book_id):
 
         return render_template(
             'books/book.html',
-            book=book, reviews=reviews,
+            book=book_by_id, reviews=reviews,
             book_quantity=book_quantity
         )
 

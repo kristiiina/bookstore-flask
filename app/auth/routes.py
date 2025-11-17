@@ -9,7 +9,9 @@ from app.auth.forms import (RegistrationForm,
                             ResetPasswordPhoneForm,
                             ResetPasswordCodeForm,
                             ResetPasswordNewForm)
-from app.auth.utils import AuthService, DatabaseOperationError, DataAccessError, UserDoesNotExistError
+# from app.auth.utils import AuthService, DatabaseOperationError, DataAccessError, UserDoesNotExistError
+from app.exceptions import UserDoesNotExistError, DatabaseOperationError, DataAccessError
+from app.services import AuthService
 
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')

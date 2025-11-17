@@ -11,6 +11,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_URL
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'books.home'
+login_manager.login_message = 'Необходимо авторизоваться для доступа к этой странице'
 
 
 @login_manager.user_loader
