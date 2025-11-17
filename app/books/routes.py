@@ -1,12 +1,5 @@
 from flask import Blueprint, flash, redirect, render_template, url_for, request
 from flask_login import current_user
-# from app.books.utils import (BookService,
-#                              BookNotFoundError,
-#                              BooksNotFoundError,
-#                              DatabaseOperationError,
-#                              DataAccessError)
-# from app.books.utils import (BookNotFoundError,
-#                              BooksNotFoundError)
 from app.services import BookService
 from app.exceptions import DatabaseOperationError, DataAccessError, BookNotFoundError, BooksNotFoundError
 

@@ -9,7 +9,6 @@ from app.auth.forms import (RegistrationForm,
                             ResetPasswordPhoneForm,
                             ResetPasswordCodeForm,
                             ResetPasswordNewForm)
-# from app.auth.utils import AuthService, DatabaseOperationError, DataAccessError, UserDoesNotExistError
 from app.exceptions import UserDoesNotExistError, DatabaseOperationError, DataAccessError
 from app.services import AuthService
 
